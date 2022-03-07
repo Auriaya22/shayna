@@ -18,9 +18,9 @@
         <div class="row">
           <div class="col-lg-2 col-md-2">
             <div class="logo">
-              <a href="./index.html">
+              <router-link to="/">
                 <img src="img/logo_website_shayna.png" alt="" />
-              </a>
+              </router-link>
             </div>
           </div>
           <div class="col-lg-7 col-md-7"></div>
@@ -73,7 +73,7 @@
                   </div>
                   <div class="select-button">
                     <a href="#" class="primary-btn view-card">VIEW CARD</a>
-                    <a href="#" class="primary-btn checkout-btn">CHECK OUT</a>
+                    <router-link to="/cart"><a href="#" class="primary-btn checkout-btn">CHECK OUT</a></router-link>
                   </div>
                 </div>
               </li>
