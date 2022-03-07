@@ -1,6 +1,8 @@
 <template>
   <div class="product">
+    
     <HeaderShayna />
+
     <!-- Breadcrumb Section Begin -->
     <div class="breacrumb-section">
       <div class="container">
@@ -101,9 +103,11 @@
                     <h4>$495.00</h4>
                   </div>
                   <div class="quantity">
-                    <a href="shopping-cart.html" class="primary-btn pd-cart"
-                      >Add To Cart</a
-                    >
+                    <router-link to="/cart">
+                      <a href="shopping-cart.html" class="primary-btn pd-cart"
+                        >Add To Cart</a
+                      >
+                    </router-link>
                   </div>
                 </div>
               </div>
@@ -113,7 +117,9 @@
       </div>
     </section>
     <!-- Product Shop Section End -->
+
     <RelatedShayna />
+
     <FooterShayna />
   </div>
 </template>

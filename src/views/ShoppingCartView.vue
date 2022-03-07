@@ -1,5 +1,5 @@
 <template>
-  <div class="shopping-cart">
+  <div class="shopping">
     <HeaderShayna />
 
     <!-- Breadcrumb Section Begin -->
@@ -7,8 +7,8 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-12">
-            <div class="breadcrumb-text product-more">
-              <a href="./home.html"><i class="fa fa-home"></i> Home</a>
+            <div class="breadcrumb-text product-more text-left">
+              <router-link to="/"><i class="fa fa-home"></i> Home</router-link>
               <span>Shopping Cart</span>
             </div>
           </div>
@@ -64,10 +64,10 @@
                 </div>
               </div>
               <div class="col-lg-8">
-                <h4 class="mb-4">Informasi Pembeli:</h4>
+                <h4 class="mb-4 text-left">Informasi Pembeli:</h4>
                 <div class="user-checkout">
                   <form>
-                    <div class="form-group">
+                    <div class="form-group text-left">
                       <label for="namaLengkap">Nama lengkap</label>
                       <input
                         type="text"
@@ -77,7 +77,7 @@
                         placeholder="Masukan Nama"
                       />
                     </div>
-                    <div class="form-group">
+                    <div class="form-group text-left">
                       <label for="namaLengkap">Email Address</label>
                       <input
                         type="email"
@@ -87,7 +87,7 @@
                         placeholder="Masukan Email"
                       />
                     </div>
-                    <div class="form-group">
+                    <div class="form-group text-left">
                       <label for="namaLengkap">No. HP</label>
                       <input
                         type="text"
@@ -97,7 +97,7 @@
                         placeholder="Masukan No. HP"
                       />
                     </div>
-                    <div class="form-group">
+                    <div class="form-group text-left">
                       <label for="alamatLengkap">Alamat Lengkap</label>
                       <textarea
                         class="form-control"
@@ -133,7 +133,11 @@
                       Nama Penerima <span>Shayna</span>
                     </li>
                   </ul>
-                  <a href="success.html" class="proceed-btn">I ALREADY PAID</a>
+                  <router-link to="/success">
+                    <a href="success.html" class="proceed-btn"
+                      >I ALREADY PAID</a
+                    >
+                  </router-link>
                 </div>
               </div>
             </div>
@@ -142,6 +146,7 @@
       </div>
     </section>
     <!-- Shopping Cart Section End -->
+
     <FooterShayna />
   </div>
 </template>
@@ -149,14 +154,12 @@
 <script>
 // @ is an alias to /src
 import HeaderShayna from "@/components/HeaderShayna.vue";
-import RelatedShayna from "@/components/RelatedShayna.vue";
 import FooterShayna from "@/components/FooterShayna.vue";
 export default {
-  name: "ProductView",
+  name: "ShoppingCardView",
   components: {
     HeaderShayna,
     FooterShayna,
-    RelatedShayna,
   },
 };
 </script>

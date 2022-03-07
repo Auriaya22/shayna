@@ -1,10 +1,15 @@
 <template>
   <div class="home">
     <HeaderShayna />
+
     <HeroShayna />
+
     <WomanShayna />
+
     <InstaShayna />
+
     <PartnerShayna />
+
     <FooterShayna />
   </div>
 </template>
