@@ -1,6 +1,5 @@
 <template>
   <div class="product">
-    
     <HeaderShayna />
 
     <!-- Breadcrumb Section Begin -->
@@ -26,88 +25,51 @@
             <div class="row">
               <div class="col-lg-6">
                 <div class="product-pic-zoom">
-                  <img class="product-big-img" :src="photo" alt="" />
+                  <img class="product-big-img" :src="gambar_default" alt="" />
                 </div>
-                <div class="product-thumbs">
+                <div class="product-thumbs" v-if="galleries.length > 0">
                   <carousel
                     class="product-thumbs-track ps-slider"
                     :loop="true"
                     :autoplay="true"
-                    :items="3"
+                    :items="galleries.length"
                     :dots="false"
                     :nav="false"
                   >
                     <div
+                      v-for="ss in galleries"
+                      :key="ss.id"
                       class="pt"
-                      @click="changeImage(thumbs[0])"
-                      :class="thumbs[0] == photo ? 'active' : ''"
+                      @click="changeImage(ss.photo)"
+                      :class="ss.photo == gambar_default ? 'active' : ''"
                     >
-                      <img src="img/mickey1.jpg" alt="" />
-                    </div>
-
-                    <div
-                      class="pt"
-                      @click="changeImage(thumbs[1])"
-                      :class="thumbs[1] == photo ? 'active' : ''"
-                    >
-                      <img src="img/mickey2.jpg" alt="" />
-                    </div>
-
-                    <div
-                      class="pt"
-                      @click="changeImage(thumbs[2])"
-                      :class="thumbs[2] == photo ? 'active' : ''"
-                    >
-                      <img src="img/mickey3.jpg" alt="" />
-                    </div>
-
-                    <div
-                      class="pt"
-                      @click="changeImage(thumbs[3])"
-                      :class="thumbs[3] == photo ? 'active' : ''"
-                    >
-                      <img src="img/mickey4.jpg" alt="" />
+                      <img :src="ss.photo" class="rounded img-thumbnail" />
                     </div>
                   </carousel>
+                </div>
+                <div v-else>
+                  <p>Belum ada gambar produk</p>
                 </div>
               </div>
               <div class="col-lg-6">
                 <div class="product-details">
                   <div class="pd-title">
-                    <span>oranges</span>
-                    <h3>Pure Pineapple</h3>
+                    <span>{{ product.type }}</span>
+                    <h3>{{ product.name }}</h3>
                   </div>
                   <div class="pd-desc">
-                    <p>
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Corporis, error officia. Rem aperiam laborum voluptatum
-                      vel, pariatur modi hic provident eum iure natus quos non a
-                      sequi, id accusantium! Autem.
-                    </p>
-                    <p>
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                      Quam possimus quisquam animi, commodi, nihil voluptate
-                      nostrum neque architecto illo officiis doloremque et
-                      corrupti cupiditate voluptatibus error illum. Commodi
-                      expedita animi nulla aspernatur. Id asperiores blanditiis,
-                      omnis repudiandae iste inventore cum, quam sint molestiae
-                      accusamus voluptates ex tempora illum sit perspiciatis.
-                      Nostrum dolor tenetur amet, illo natus magni veniam quia
-                      sit nihil dolores. Commodi ratione distinctio harum
-                      voluptatum velit facilis voluptas animi non laudantium, id
-                      dolorem atque perferendis enim ducimus? A exercitationem
-                      recusandae aliquam quod. Itaque inventore obcaecati, unde
-                      quam impedit praesentium veritatis quis beatae ea atque
-                      perferendis voluptates velit architecto?
-                    </p>
-                    <h4>$495.00</h4>
+                    <p v-html="product.description"></p>
+                    <h4>Rp. {{ product.price }}</h4>
                   </div>
                   <div class="quantity">
-                    <router-link to="/cart">
-                      <a href="shopping-cart.html" class="primary-btn pd-cart"
-                        >Add To Cart</a
-                      >
-                    </router-link>
+                    <!-- <router-link to="/cart"> -->
+                    <a
+                      @click="simpanKeranjang(product.id)"
+                      href="#"
+                      class="primary-btn pd-cart"
+                      >Add To Cart</a
+                    >
+                    <!-- </router-link> -->
                   </div>
                 </div>
               </div>
@@ -126,10 +88,12 @@
 
 <script>
 // @ is an alias to /src
-import carousel from "vue-owl-carousel";
 import HeaderShayna from "@/components/HeaderShayna.vue";
 import RelatedShayna from "@/components/RelatedShayna.vue";
 import FooterShayna from "@/components/FooterShayna.vue";
+
+import axios from "axios";
+import carousel from "vue-owl-carousel";
 
 export default {
   name: "ProductView",
@@ -141,18 +105,44 @@ export default {
   },
   data() {
     return {
-      photo: "img/mickey1.jpg",
-      thumbs: [
-        "img/mickey1.jpg",
-        "img/mickey2.jpg",
-        "img/mickey3.jpg",
-        "img/mickey4.jpg",
-      ],
+      gambar_default: "",
+      product: [],
+      galleries: [],
+      keranjangUser: [],
     };
+  },
+  mounted() {
+    if (localStorage.getItem("keranjangUser")) {
+      try {
+        this.keranjangUser = JSON.parse(localStorage.getItem("keranjangUser"));
+      } catch (e) {
+        localStorage.removeItem("keranjangUser");
+      }
+    }
+    axios
+      .get("http://shayna-backend.test/api/products", {
+        params: {
+          id: this.$route.params.id,
+        },
+      })
+      .then((res) => {
+        this.setDataPicture(res.data.data);
+      })
+      .catch((err) => console.log(err));
   },
   methods: {
     changeImage(urlImage) {
-      this.photo = urlImage;
+      this.gambar_default = urlImage;
+    },
+    setDataPicture(data) {
+      this.product = data;
+      this.galleries = data.galleries;
+      this.gambar_default = data.galleries[0].photo;
+    },
+    simpanKeranjang(idProduct) {
+      this.keranjangUser.push(idProduct);
+      const parsed = JSON.stringify(this.keranjangUser);
+      localStorage.setItem("keranjangUser", parsed);
     },
   },
 };
