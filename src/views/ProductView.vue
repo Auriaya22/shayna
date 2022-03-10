@@ -62,14 +62,14 @@
                     <h4>Rp. {{ product.price }}</h4>
                   </div>
                   <div class="quantity">
-                    <!-- <router-link to="/cart"> -->
+                    <router-link to="/cart">
                     <a
-                      @click="simpanKeranjang(product.id)"
+                      @click="simpanKeranjang(product.id, product.name, product.price, galleries[0].photo)"
                       href="#"
                       class="primary-btn pd-cart"
                       >Add To Cart</a
                     >
-                    <!-- </router-link> -->
+                    </router-link>
                   </div>
                 </div>
               </div>
@@ -139,10 +139,17 @@ export default {
       this.galleries = data.galleries;
       this.gambar_default = data.galleries[0].photo;
     },
-    simpanKeranjang(idProduct) {
-      this.keranjangUser.push(idProduct);
+    simpanKeranjang(idProduct, nameProduct, priceProduct, photoProduct) {
+      var productStored = {
+        "id"    : idProduct,
+        "name"  : nameProduct,
+        "price" : priceProduct,
+        "photo" : photoProduct
+      };
+      this.keranjangUser.push(productStored);
       const parsed = JSON.stringify(this.keranjangUser);
       localStorage.setItem("keranjangUser", parsed);
+      location.reload();
     },
   },
 };

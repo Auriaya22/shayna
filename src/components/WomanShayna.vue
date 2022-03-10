@@ -18,13 +18,29 @@
               v-bind:key="itemProduct.id"
             >
               <div class="pi-pic">
-                <img v-bind:src="itemProduct.galleries[0].photo" class="img-thumbnail rounded"/>
+                <img
+                  v-bind:src="itemProduct.galleries[0].photo"
+                  class="img-thumbnail rounded"
+                />
                 <ul>
                   <li class="w-icon active">
-                    <a href="#"><i class="icon_bag_alt"></i></a>
+                    <a
+                      @click="
+                        simpanKeranjang(
+                          itemProduct.id,
+                          itemProduct.name,
+                          itemProduct.price,
+                          itemProduct.galleries[0].photo
+                        )
+                      "
+                      href="#"
+                      ><i class="icon_bag_alt"></i
+                    ></a>
                   </li>
                   <li class="quick-view">
-                    <router-link v-bind:to="'/product/'+itemProduct.id">+ Quick View</router-link>
+                    <router-link v-bind:to="'/product/' + itemProduct.id"
+                      >+ Quick View</router-link
+                    >
                   </li>
                 </ul>
               </div>
@@ -62,9 +78,31 @@ export default {
   data() {
     return {
       products: [],
+      keranjangUser: [],
     };
   },
+  methods: {
+    simpanKeranjang(idProduct, nameProduct, priceProduct, photoProduct) {
+      var productStored = {
+        id: idProduct,
+        name: nameProduct,
+        price: priceProduct,
+        photo: photoProduct,
+      };
+      this.keranjangUser.push(productStored);
+      const parsed = JSON.stringify(this.keranjangUser);
+      localStorage.setItem("keranjangUser", parsed);
+      location.reload();
+    },
+  },
   mounted() {
+    if (localStorage.getItem("keranjangUser")) {
+      try {
+        this.keranjangUser = JSON.parse(localStorage.getItem("keranjangUser"));
+      } catch (e) {
+        localStorage.removeItem("keranjangUser");
+      }
+    }
     axios
       .get("http://shayna-backend.test/api/products")
       .then((res) => {
